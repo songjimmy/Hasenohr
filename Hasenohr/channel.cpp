@@ -11,6 +11,13 @@ const int channel::k_write_event = POLLOUT;
 channel::channel(event_loop* loop, fd_t fd)
 	:loop_(loop),fd_(fd),events_(0),revents_(0),index_(-1)
 {}
+/*
+channel::channel(channel&& channel_)
+	:fd_(0)
+{
+	std::swap(*this, channel_);
+}
+*/
 //事件分发函数
 void channel::handle_event()
 {
@@ -80,6 +87,12 @@ bool channel::is_none_event() const
 void channel::enable_reading()
 {
 	events_ |= k_read_event ;//使读掩码置1而不影响其他位
+	update();
+}
+
+void channel::unenable_reading()
+{
+	events_ = k_none_event;//使读掩码置0
 	update();
 }
 

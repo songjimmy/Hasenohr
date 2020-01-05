@@ -4,14 +4,6 @@
   正在验证体系结构
   正在启动远程生成
   正在编译源:
-  channel.cpp
-D:\Hasenohr\Hasenohr\channel.h(48,14): warning : ‘channel::loop_’ will be initialized after [-Wreorder]
-D:\Hasenohr\Hasenohr\channel.h(48,14): warning :   event_loop* loop_;
-D:\Hasenohr\Hasenohr\channel.h(48,14): warning :               ^
-D:\Hasenohr\Hasenohr\channel.h(37,13): warning : ‘const fd_t channel::fd_’ [-Wreorder]
-D:\Hasenohr\Hasenohr\channel.h(37,13): warning :   const fd_t fd_;
-D:\Hasenohr\Hasenohr\channel.h(37,13): warning :              ^
-D:\Hasenohr\Hasenohr\channel.cpp(11,1): warning : when initialized here [-Wreorder]
   main.cpp
   正在链接对象
-  Hasenohr.vcxproj -> D:\Hasenohr\Hasenohr\bin\x64\Debug\Hasenohr.out
+  Hasenohr.vcxproj -> C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\bin\x64\Debug\Hasenohr.out
