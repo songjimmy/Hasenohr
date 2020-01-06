@@ -12,8 +12,9 @@ public:
 	void run();
 	bool restart();
 	bool check(muduo::Timestamp time_stamp) const;
+	muduo::Timestamp waiting_time() const;
 private:
-	muduo::Timestamp waiting_time;
+	muduo::Timestamp waiting_time_;
 	double interval;
 	bool repeat;
 	const callback cb_;

@@ -24,7 +24,7 @@ my_timer::~my_timer()
 void my_timer::set_time_callback(const callback& cb)
 {
 	//边缘触发，传入的方法在计时器触发后执行一次
-	auto time_function = [cb](channel& channel__)->void {cb(); channel__.unenable_reading(); };
+	auto time_function = [cb](channel& channel__)->void { channel__.unenable_reading(); cb();};
 	channel_.set_read_callback(std::bind(time_function,std::ref(channel_)));
 	channel_.enable_reading();
 }
