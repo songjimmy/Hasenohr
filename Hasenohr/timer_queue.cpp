@@ -4,9 +4,46 @@
 #include <string.h>
 #include <utility>
 #include <sys/timerfd.h>
+//
 
+int create_timer_fd()
+{
+	int timer_fd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+	if (!timer_fd)
+	{
+		printf("Create timer_fd unsuccessfully");
+	}
+	return timer_fd;
+}
+
+itimerspec how_much_time_from_now(muduo::Timestamp when)
+{
+	itimerspec howlong;
+	bzero(&howlong, sizeof howlong);
+	howlong;
+	int64_t howlong_microseconds = when.microSecondsSinceEpoch() - muduo::Timestamp::now().microSecondsSinceEpoch();
+	howlong.it_value.tv_sec = howlong_microseconds/muduo::Timestamp::kMicroSecondsPerSecond;
+	howlong.it_value.tv_nsec = howlong_microseconds% muduo::Timestamp::kMicroSecondsPerSecond*1000;
+	return howlong;
+}
+
+void reset_timer_fd(int timerfd, muduo::Timestamp expiration)
+{
+	itimerspec howlong = how_much_time_from_now(expiration);
+	::timerfd_settime(timerfd, 0, &howlong, NULL);
+}
+
+struct time_function
+{
+	void operator()(timer_queue& timer_queue_, channel& channel__)
+	{
+		channel__.unenable_reading();
+		timer_queue_.handle_alarm();
+		timer_queue_.set_timer_channel();
+	}
+};
 timer_queue::timer_queue(event_loop* loop)
-:time_fd_(::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)),timer_channel(loop,time_fd_),
+:time_fd_(create_timer_fd()),timer_channel(loop,time_fd_),
 owner_loop_(loop), timer_list_(less_compare())
 {
 }
@@ -38,8 +75,6 @@ void timer_queue::handle_alarm()
 	}
 }
 
-
-
 timer_queue::~timer_queue()
 {
 	close(time_fd_);
@@ -47,26 +82,15 @@ timer_queue::~timer_queue()
 
 void timer_queue::set_timer_channel()
 {
-	bzero(&howlong, sizeof howlong);
 	if (timer_list_.empty())
 	{
 		timer_channel.unenable_reading();
 	}
 	else
 	{
-		double temp= muduo::timeDifference(timer_list_.begin()->waiting_time(), muduo::Timestamp::now());
-		howlong.it_value.tv_sec = temp;
-		howlong.it_value.tv_nsec = (muduo::timeDifference(timer_list_.begin()->waiting_time(), muduo::Timestamp::now()) - howlong.it_value.tv_sec) * double(1000000000);
-		::timerfd_settime(time_fd_, 0, &howlong, NULL);
-		auto time_function = [](timer_queue& timer_queue_,channel& channel__)
-		{	
-			channel__.unenable_reading();
-			timer_queue_.handle_alarm(); 
-			timer_queue_.set_timer_channel(); 
-		};
-		timer_channel.set_read_callback(std::bind(time_function,std::ref(*this), std::ref(timer_channel)));
+		reset_timer_fd(time_fd_,timer_list_.begin()->waiting_time());
+		timer_channel.set_read_callback(std::bind(time_function(), std::ref(*this), std::ref(this->timer_channel)));
 		timer_channel.enable_reading();
-		
 	}
 }
 

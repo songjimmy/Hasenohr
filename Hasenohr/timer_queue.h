@@ -27,6 +27,5 @@ private:
 	//可能存在泄露的资源
 	int time_fd_;
 	//定时设置
-	itimerspec howlong;
 	event_loop* owner_loop_;
 };

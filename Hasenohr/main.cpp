@@ -85,6 +85,6 @@ int main()
 	my_timer timer__(10, &loop_);
 	timer__.set_time_callback(std::bind(&timeout_2));
 	timer_queue_.set_timer_channel();
-	//thread_.start();
+	thread_.start();
 	loop_.loop();
 }

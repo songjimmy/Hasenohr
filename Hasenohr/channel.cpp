@@ -1,7 +1,8 @@
 #include "channel.h"
 #include <unistd.h>
 #include <poll.h>
-#include"event_loop.h"
+#include "event_loop.h"
+#include <iostream>
 const int channel::k_none_event = 0;//等于0是什么语义？
 //紧急优先普通可读
 const int channel::k_read_event=POLLIN | POLLPRI;
@@ -21,10 +22,13 @@ channel::channel(channel&& channel_)
 //事件分发函数
 void channel::handle_event()
 {
+	//printf("%d\n", events_);
+	//std::cout << events_ << std::endl;
 	//有错误发生或非法的事件描述符
 	if (events_ & (POLLNVAL | POLLERR))
 	{
 		if (func_erro) func_erro();
+		
 	}
 	//读
 	if (events_ & k_read_event)

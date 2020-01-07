@@ -32,7 +32,7 @@ void event_loop::loop()
 		active_channels.clear();
 		muduo::Timestamp timestamp;
 		timestamp=poller_->poll(Max_time, &active_channels);
-		LOG_INFO<< timestamp.toFormattedString() << "\n";
+		//LOG_INFO<< timestamp.toFormattedString() << "\n";
 		for (auto& item : active_channels)
 		{
 			item->handle_event();
