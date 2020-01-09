@@ -10,7 +10,7 @@
 class timer_queue
 {
 public:
-	typedef std::set<timer,less_compare> timer_set;
+	typedef std::multiset<timer,less_compare> timer_set;
 	timer_queue(event_loop* loop);
 	//Ìí¼Ó¼ÆÊ±Æ÷
 	void add_timer(const timer& timer_);

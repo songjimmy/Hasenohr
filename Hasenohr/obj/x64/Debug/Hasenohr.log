@@ -5,55 +5,19 @@
   正在启动远程生成
   正在编译源:
   channel.cpp
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\channel.h(50,14): warning : ‘channel::loop_’ will be initialized after [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\channel.h(50,14): warning :   event_loop* loop_;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\channel.h(50,14): warning :               ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\channel.h(39,13): warning : ‘const fd_t channel::fd_’ [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\channel.h(39,13): warning :   const fd_t fd_;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\channel.h(39,13): warning :              ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\channel.cpp(12,1): warning : when initialized here [-Wreorder]
   event_loop.cpp
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\event_loop.cpp(12,69): warning : conversion to ‘pid_t {aka int}’ from ‘pthread_t {aka long unsigned int}’ may alter its value [-Wconversion]
+D:\Hasenohr\Hasenohr\event_loop.cpp(12,69): warning : conversion to ‘pid_t {aka int}’ from ‘pthread_t {aka long unsigned int}’ may alter its value [-Wconversion]
   main.cpp
   poller.cpp
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(48,38): warning : comparison between signed and unsigned integer expressions [-Wsign-compare]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(48,38): warning :    assert(index_ <= pollfd_list_.size());
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(48,38): warning :                                       ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(49,50): warning : conversion to ‘short int’ from ‘int’ may alter its value [-Wconversion]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(49,50): warning :    pollfd_list_[index_].events = channel_->events();
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(49,50): warning :                                                   ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(57,40): warning : conversion to ‘short int’ from ‘int’ may alter its value [-Wconversion]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(57,40): warning :    new_pollfd.events = channel_->events();
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(57,40): warning :                                         ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(61,43): warning : conversion to ‘int’ from ‘std::vector<pollfd>::size_type {aka long unsigned int}’ may alter its value [-Wconversion]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(61,43): warning :    channel_->set_index(pollfd_list_.size() - 1);
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(61,43): warning :                                            ^
   my_timer.cpp
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(33,14): warning : ‘my_timer::owner_loop_’ will be initialized after [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(33,14): warning :   event_loop* owner_loop_;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(33,14): warning :               ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(27,10): warning : ‘my_timer::time_fd my_timer::time_fd_’ [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(27,10): warning :   time_fd time_fd_;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(27,10): warning :           ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.cpp(10,1): warning : when initialized here [-Wreorder]
+D:\Hasenohr\Hasenohr\my_timer.h(33,14): warning : ‘my_timer::owner_loop_’ will be initialized after [-Wreorder]
+D:\Hasenohr\Hasenohr\my_timer.h(33,14): warning :   event_loop* owner_loop_;
+D:\Hasenohr\Hasenohr\my_timer.h(33,14): warning :               ^
+D:\Hasenohr\Hasenohr\my_timer.h(27,10): warning : ‘my_timer::time_fd my_timer::time_fd_’ [-Wreorder]
+D:\Hasenohr\Hasenohr\my_timer.h(27,10): warning :   time_fd time_fd_;
+D:\Hasenohr\Hasenohr\my_timer.h(27,10): warning :           ^
+D:\Hasenohr\Hasenohr\my_timer.cpp(10,1): warning : when initialized here [-Wreorder]
   timer.cpp
   timer_queue.cpp
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.cpp(23,9): warning : statement has no effect [-Wunused-value]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.cpp(23,9): warning :   howlong;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.cpp(23,9): warning :          ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(28,6): warning : ‘timer_queue::time_fd_’ will be initialized after [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(28,6): warning :   int time_fd_;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(28,6): warning :       ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(26,10): warning : ‘channel timer_queue::timer_channel’ [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(26,10): warning :   channel timer_channel;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(26,10): warning :           ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.cpp(45,1): warning : when initialized here [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(30,14): warning : ‘timer_queue::owner_loop_’ will be initialized after [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(30,14): warning :   event_loop* owner_loop_;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(30,14): warning :               ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(25,12): warning : ‘timer_queue::timer_set timer_queue::timer_list_’ [-Wreorder]
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(25,12): warning :   timer_set timer_list_;
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.h(25,12): warning :             ^
-C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\timer_queue.cpp(45,1): warning : when initialized here [-Wreorder]
   正在链接对象
-  Hasenohr.vcxproj -> C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\bin\x64\Debug\Hasenohr.out
+  Hasenohr.vcxproj -> D:\Hasenohr\Hasenohr\bin\x64\Debug\Hasenohr.out

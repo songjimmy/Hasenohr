@@ -37,7 +37,5 @@ muduo::Timestamp timer::waiting_time() const
 bool less_compare::operator()(const timer& timer_1, const timer& timer_2)
 {
 	if (timer_1.waiting_time_ < timer_2.waiting_time_) return true;
-	else if (timer_2.waiting_time_ < timer_1.waiting_time_) return false;
-	else if (&timer_1 < &timer_2) return true;
-	else return false;
+	else  return false;
 }

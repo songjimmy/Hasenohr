@@ -96,7 +96,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
@@ -104,7 +104,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -112,7 +112,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -120,7 +120,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -128,7 +128,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,7 +136,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -144,7 +144,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -152,7 +152,7 @@
       <LibraryDependencies>muduo_base;pthread</LibraryDependencies>
     </Link>
     <ClCompile>
-      <Optimization>MinSize</Optimization>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,8 @@
 #include "poller.h"
 #include "channel.h"
 #include <unistd.h>
+#include <stdio.h>
+#include <iostream>
 poller::poller(event_loop* owner_loop) :owner_loop_(owner_loop)
 {
 }
@@ -9,6 +11,7 @@ poller::poller(event_loop* owner_loop) :owner_loop_(owner_loop)
 muduo::Timestamp poller::poll(int time_out_ms, channel_list* active_channels)
 {
 	int active_num=::poll(pollfd_list_.data(), pollfd_list_.size(), time_out_ms);
+	//std::cout << muduo::Timestamp::now().toFormattedString()<<":"<< active_num<<std::endl;
 	muduo::Timestamp now_ = muduo::Timestamp::now();
 	if (active_num < 0)
 	{
@@ -42,11 +45,11 @@ void poller::update_channel(channel* channel_)
 	//在map中找到了
 	if ( it!= channel_map_.end())
 	{
-		channel* channel_in_map = it->second;//channel*
+		channel* channel_in_map = it->second;
 		assert(channel_in_map->fd() == channel_->fd());
-		int index_ = channel_in_map->index();
+		size_t index_ = channel_in_map->index();
 		assert(index_ <= pollfd_list_.size());
-		pollfd_list_[index_].events = channel_->events();
+		pollfd_list_[index_].events = short(channel_->events());
 		pollfd_list_[index_].revents = 0;
 		if (channel_->is_none_event())
 			pollfd_list_[index_].events = -1;
@@ -54,11 +57,11 @@ void poller::update_channel(channel* channel_)
 	else
 	{
 		pollfd new_pollfd;
-		new_pollfd.events = channel_->events();
+		new_pollfd.events = short(channel_->events());
 		new_pollfd.revents = 0;
 		new_pollfd.fd = channel_->fd();
 		pollfd_list_.push_back(new_pollfd);
-		channel_->set_index(pollfd_list_.size() - 1);
+		channel_->set_index(int(pollfd_list_.size()) - 1);
 		channel_map_[channel_->fd()] = channel_;
 	}
 }

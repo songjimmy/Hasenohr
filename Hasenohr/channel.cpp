@@ -10,20 +10,12 @@ const int channel::k_read_event=POLLIN | POLLPRI;
 const int channel::k_write_event = POLLOUT;
 
 channel::channel(event_loop* loop, fd_t fd)
-	:loop_(loop),fd_(fd),events_(0),revents_(0),index_(-1)
-{}
-/*
-channel::channel(channel&& channel_)
-	:fd_(0)
+	:fd_(fd),events_(0),revents_(0),index_(-1),loop_(loop)
 {
-	std::swap(*this, channel_);
 }
-*/
 //事件分发函数
 void channel::handle_event()
 {
-	//printf("%d\n", events_);
-	//std::cout << events_ << std::endl;
 	//有错误发生或非法的事件描述符
 	if (events_ & (POLLNVAL | POLLERR))
 	{
@@ -85,7 +77,7 @@ void channel::set_revents(int revents)
 
 bool channel::is_none_event() const
 {
-	return revents_==k_none_event;
+	return events_==k_none_event;
 }
 //使channel能关注“可读”事件
 void channel::enable_reading()
@@ -108,6 +100,12 @@ int channel::index() const
 void channel::set_index(int index_addr)
 {
 	index_ = index_addr;
+}
+
+void channel::print()
+{
+	LOG_INFO <<"events:" <<events_;
+	LOG_INFO <<"revents:" <<revents_;
 }
 
 void channel::update()

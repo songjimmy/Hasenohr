@@ -26,6 +26,7 @@ public:
 	void unenable_reading();
 	int index() const;
 	void set_index(int index_addr);
+	void print();
 private:
 	//用来进行什么的更新？
 	void update();//

@@ -7,7 +7,8 @@
 using std::placeholders::_1;
 using std::placeholders::_2;
 using std::placeholders::_3;
-my_timer::my_timer(int time_ms, event_loop* owner_loop):owner_loop_(owner_loop), time_fd_(::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC))
+my_timer::my_timer(int time_ms, event_loop* owner_loop)
+	:owner_loop_(owner_loop), time_fd_(::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC))
 , channel_(owner_loop,time_fd_)
 {
 	bzero(&howlong, sizeof howlong);
