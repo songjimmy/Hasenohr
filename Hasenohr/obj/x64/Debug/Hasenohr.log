@@ -4,20 +4,6 @@
   正在验证体系结构
   正在启动远程生成
   正在编译源:
-  channel.cpp
-  event_loop.cpp
-D:\Hasenohr\Hasenohr\event_loop.cpp(12,69): warning : conversion to ‘pid_t {aka int}’ from ‘pthread_t {aka long unsigned int}’ may alter its value [-Wconversion]
-  main.cpp
-  poller.cpp
-  my_timer.cpp
-D:\Hasenohr\Hasenohr\my_timer.h(33,14): warning : ‘my_timer::owner_loop_’ will be initialized after [-Wreorder]
-D:\Hasenohr\Hasenohr\my_timer.h(33,14): warning :   event_loop* owner_loop_;
-D:\Hasenohr\Hasenohr\my_timer.h(33,14): warning :               ^
-D:\Hasenohr\Hasenohr\my_timer.h(27,10): warning : ‘my_timer::time_fd my_timer::time_fd_’ [-Wreorder]
-D:\Hasenohr\Hasenohr\my_timer.h(27,10): warning :   time_fd time_fd_;
-D:\Hasenohr\Hasenohr\my_timer.h(27,10): warning :           ^
-D:\Hasenohr\Hasenohr\my_timer.cpp(10,1): warning : when initialized here [-Wreorder]
-  timer.cpp
   timer_queue.cpp
   正在链接对象
   Hasenohr.vcxproj -> D:\Hasenohr\Hasenohr\bin\x64\Debug\Hasenohr.out

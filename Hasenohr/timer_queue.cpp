@@ -11,6 +11,7 @@
 int create_timer_fd()
 {
 	int timer_fd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+	printf("%d\n", timer_fd);
 	if (!timer_fd)
 	{
 		printf("Create timer_fd unsuccessfully");
@@ -39,11 +40,11 @@ void reset_timer_fd(int timerfd, muduo::Timestamp expiration)
 void readTimerfd(int timerfd, muduo::Timestamp now)
 {
 	uint64_t howmany;
-	ssize_t n = ::read(timerfd, &howmany, sizeof howmany);
-	LOG_TRACE << "TimerQueue::handleRead() " << howmany << " at " << now.toString();
+	ssize_t n = ::read(timerfd, (void*)(&howmany), sizeof howmany);
+	//LOG_ERROR << "TimerQueue::handleRead() " << howmany << " at " << now.toString();
 	if (n != sizeof howmany)
 	{
-		//LOG_ERROR << "TimerQueue::handleRead() reads " << n << " bytes instead of 8";
+		//LOG_ERROR << "TimerQueue::handleRead() reads " << n << " bytes instead of "<< sizeof howmany;
 	}
 }
 timer_queue::timer_queue(event_loop* loop)
@@ -99,7 +100,6 @@ void timer_queue::set_timer_channel()
 	else
 	{
 		reset_timer_fd(time_fd_,timer_list_.begin()->waiting_time());
-		//LOG_INFO<< timer_list_.begin()->waiting_time().toFormattedString();
 	}
 }
 

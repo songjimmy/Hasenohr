@@ -16,7 +16,7 @@ public:
 private:
 	muduo::Timestamp waiting_time_;
 	double interval;
-	bool repeat;
+	const bool repeat;
 	const callback cb_;
 };
 struct less_compare
