@@ -22,10 +22,8 @@ public:
 	~timer_queue();
 	void set_timer_channel();
 private:
-	timer_set timer_list_;
-	channel timer_channel;
-	//可能存在泄露的资源
-	int time_fd_;
-	//定时设置
 	event_loop* owner_loop_;
+	int time_fd_;
+	channel timer_channel;
+	timer_set timer_list_;
 };

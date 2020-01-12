@@ -16,19 +16,23 @@ channel::channel(event_loop* loop, fd_t fd)
 //事件分发函数
 void channel::handle_event()
 {
+	if (revents_&POLLNVAL)
+	{
+		LOG_INFO << "POLLNVAL";
+	}
 	//有错误发生或非法的事件描述符
-	if (events_ & (POLLNVAL | POLLERR))
+	if (revents_ & (POLLNVAL | POLLERR))
 	{
 		if (func_erro) func_erro();
 		
 	}
 	//读
-	if (events_ & k_read_event)
+	if (revents_ & (k_read_event|POLLRDHUP))
 	{
 		if (func_read) func_read();
 	}
 	//写
-	if (events_&k_write_event)
+	if (revents_&k_write_event)
 	{
 		if(func_write) func_write();
 	}

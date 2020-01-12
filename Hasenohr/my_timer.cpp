@@ -14,7 +14,8 @@ my_timer::my_timer(int time_ms, event_loop* owner_loop)
 {
 	printf("%d\n", time_fd_);
 	bzero(&howlong, sizeof howlong);
-	howlong.it_value.tv_sec = time_ms ;
+	howlong.it_value.tv_sec = time_ms / muduo::Timestamp::kMicroSecondsPerSecond;
+	howlong.it_value.tv_nsec = time_ms % muduo::Timestamp::kMicroSecondsPerSecond * 1000;
 	::timerfd_settime(time_fd_, 0, &howlong, NULL);
 }
 
@@ -31,7 +32,7 @@ void my_timer::set_time_callback(const callback& cb)
 	{
 		uint64_t howmany;
 		ssize_t n = ::read(time_fd_, (void*)(&howmany), sizeof howmany);
-		LOG_ERROR << "TimerQueue::handleRead() " << howmany;
+		LOG_INFO << "TimerQueue::handleRead() " << howmany;
 		if (n != sizeof howmany)
 		{
 			LOG_ERROR << "TimerQueue::handleRead() reads " << n << " bytes instead of "<< sizeof howmany;

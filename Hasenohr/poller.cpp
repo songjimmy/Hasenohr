@@ -11,7 +11,7 @@ poller::poller(event_loop* owner_loop) :owner_loop_(owner_loop)
 muduo::Timestamp poller::poll(int time_out_ms, channel_list* active_channels)
 {
 	int active_num=::poll(pollfd_list_.data(), pollfd_list_.size(), time_out_ms);
-	//std::cout << muduo::Timestamp::now().toFormattedString()<<":"<< active_num<<std::endl;
+	LOG_INFO << "poll active."<< active_num;
 	muduo::Timestamp now_ = muduo::Timestamp::now();
 	if (active_num < 0)
 	{
@@ -52,7 +52,8 @@ void poller::update_channel(channel* channel_)
 		pollfd_list_[index_].events = short(channel_->events());
 		pollfd_list_[index_].revents = 0;
 		if (channel_->is_none_event())
-			pollfd_list_[index_].events = -1;
+			pollfd_list_[index_].fd = -1;
+		else pollfd_list_[index_].fd = channel_->fd();
 	}
 	else
 	{

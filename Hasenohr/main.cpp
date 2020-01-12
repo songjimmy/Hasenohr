@@ -46,8 +46,6 @@ int main_1()
 
 	//
 	struct itimerspec howlong;
-	//memset
-	//memset(&howlong, 0, sizeof howlong);
 	bzero(&howlong, sizeof howlong);
 	howlong.it_value.tv_sec = 5;
 	::timerfd_settime(timerfd, 0, &howlong, NULL);
@@ -85,6 +83,7 @@ int main()
 {
 	muduo::Thread thread_(thread_function, "timer");
 	event_loop loop_;
+	
 	timer_queue timer_queue_(&loop_);
 	timer timer_1(muduo::addTime(muduo::Timestamp::now(), 1), 3   , &timeout_1);
 	timer timer_2(muduo::addTime(muduo::Timestamp::now(), 2), 0   , &timeout_2);
@@ -92,12 +91,14 @@ int main()
 	timer_queue_.add_timer(timer_1);
 	timer_queue_.add_timer(timer_2);
 	timer_queue_.add_timer(timer_3);
-	my_timer timer___(7, &loop_);
+	/*
+	my_timer timer___(7000000, &loop_);
 	timer___.set_time_callback(std::bind(&timeout_4));
-	my_timer timer_(5, &loop_);
+	my_timer timer_(5000000, &loop_);
 	timer_.set_time_callback(std::bind(&timeout_5));
-	my_timer timer__(10, &loop_);
+	my_timer timer__(10000000, &loop_);
 	timer__.set_time_callback(std::bind(&timeout_6));
+	*/
 	timer_queue_.set_timer_channel();
 	thread_.start();
 	loop_.loop();
