@@ -76,7 +76,9 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="channel.h" />
+    <ClInclude Include="eventfd_channel.h" />
     <ClInclude Include="event_loop.h" />
+    <ClInclude Include="event_loop_thread.h" />
     <ClInclude Include="poller.h" />
     <ClInclude Include="my_timer.h" />
     <ClInclude Include="timer.h" />
@@ -84,11 +86,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="channel.cpp" />
+    <ClCompile Include="eventfd_channel.cpp" />
     <ClCompile Include="event_loop.cpp" />
+    <ClCompile Include="event_loop_thread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="poller.cpp" />
     <ClCompile Include="my_timer.cpp" />
     <ClCompile Include="timer.cpp" />
+    <ClCompile Include="timer_entry.cpp" />
     <ClCompile Include="timer_queue.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

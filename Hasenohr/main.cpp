@@ -3,6 +3,7 @@
 #include "poller.h"
 #include "my_timer.h"
 #include "timer_queue.h"
+#include "event_loop_thread.h"
 
 #include <muduo/base/Thread.h>
 
@@ -36,6 +37,10 @@ void timeout_6()
 {
 	printf("time out 6\n");
 }
+void timeout_7()
+{
+	printf("time out 7\n");
+}
 int main_1()
 {
 	//
@@ -55,6 +60,7 @@ int main_1()
 	loop_.loop();
 	return 1;
 }
+
 void thread_function()
 {
 	int i = 0;
@@ -63,43 +69,73 @@ void thread_function()
 		printf("%dsecond\n",i);
 		sleep(1);
 		++i;
+		if (i == 5)
+		{
+		}
+	}
+}
+
+void thread_function_1(event_loop* loop)
+{
+	int i = 0;
+	while (true)
+	{
+		printf("%dsecond\n", i);
+		sleep(1);
+		++i;
+		if (i == 5)
+		{
+			loop->run_after(&timeout_7,1);
+		}
+		if (i == 10)
+		{
+			loop->quit();
+		}
 	}
 }
 
 int main_2()
 {
 	muduo::Thread thread_(thread_function,"timer");
-	event_loop loop_;
-	my_timer timer_(5, &loop_);
+	event_loop_thread loop_thread;
+	event_loop* loop_ = loop_thread.loop();
+	my_timer timer_(5, loop_);
 	timer_.set_time_callback( std::bind(&timeout_1));
-	my_timer timer_2(10, &loop_);
+	my_timer timer_2(10, loop_);
 	timer_2.set_time_callback(std::bind(&timeout_1));
 	thread_.start();
-	loop_.loop();
+	loop_->loop();
 	return 0;
 }
 
-int main()
+int main_3()
 {
 	muduo::Thread thread_(thread_function, "timer");
 	event_loop loop_;
 	
 	timer_queue timer_queue_(&loop_);
-	timer timer_1(muduo::addTime(muduo::Timestamp::now(), 1), 3   , &timeout_1);
+	timer timer_1(muduo::addTime(muduo::Timestamp::now(), 0.5), 1   , &timeout_1);
 	timer timer_2(muduo::addTime(muduo::Timestamp::now(), 2), 0   , &timeout_2);
 	timer timer_3(muduo::addTime(muduo::Timestamp::now(), 3), 0   , &timeout_3);
 	timer_queue_.add_timer(timer_1);
 	timer_queue_.add_timer(timer_2);
 	timer_queue_.add_timer(timer_3);
-	/*
-	my_timer timer___(7000000, &loop_);
-	timer___.set_time_callback(std::bind(&timeout_4));
-	my_timer timer_(5000000, &loop_);
-	timer_.set_time_callback(std::bind(&timeout_5));
-	my_timer timer__(10000000, &loop_);
-	timer__.set_time_callback(std::bind(&timeout_6));
-	*/
 	timer_queue_.set_timer_channel();
 	thread_.start();
 	loop_.loop();
+	return 1;
+}
+
+int main()
+{
+	event_loop_thread loop_thread;
+	event_loop* loop_ = loop_thread.loop();
+	loop_->run_after(&timeout_1, 9);
+	loop_->run_every(&timeout_2, 6);
+	loop_->run_every(&timeout_3, 3);
+	muduo::Thread thread_(std::bind(&thread_function_1,loop_), "timer");
+	thread_.start();
+	//loop_->loop();
+	thread_.join();
+	return 1;
 }

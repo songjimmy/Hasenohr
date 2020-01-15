@@ -1,4 +1,5 @@
 #include "timer_queue.h"
+#include "event_loop.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -7,17 +8,7 @@
 #include <muduo/base/Logging.h>
 #include <poll.h>
 #include <iostream>
-////
-int createTimerfd()
-{
-	int timerfd = ::timerfd_create(CLOCK_MONOTONIC,
-		TFD_NONBLOCK | TFD_CLOEXEC);
-	if (timerfd < 0)
-	{
-		LOG_SYSFATAL << "Failed in timerfd_create";
-	}
-	return timerfd;
-}
+
 
 int create_timer_fd()
 {
@@ -29,46 +20,25 @@ int create_timer_fd()
 	}
 	return timer_fd;
 }
-////
-struct timespec howMuchTimeFromNow(muduo::Timestamp when)
-{
-	int64_t microseconds = when.microSecondsSinceEpoch()
-		- muduo::Timestamp::now().microSecondsSinceEpoch();
-	if (microseconds < 100)
-	{
-		microseconds = 100;
-	}
-	struct timespec ts;
-	ts.tv_sec = static_cast<time_t>(
-		microseconds / muduo::Timestamp::kMicroSecondsPerSecond);
-	ts.tv_nsec = static_cast<long>(
-		(microseconds % muduo::Timestamp::kMicroSecondsPerSecond) * 1000);
-	return ts;
-}
+
 itimerspec how_much_time_from_now(muduo::Timestamp when)
 {
 	itimerspec howlong;
 	bzero(&howlong, sizeof howlong);
 	int64_t howlong_microseconds = when.microSecondsSinceEpoch() - muduo::Timestamp::now().microSecondsSinceEpoch();
-	howlong.it_value.tv_sec = howlong_microseconds/muduo::Timestamp::kMicroSecondsPerSecond;
-	howlong.it_value.tv_nsec = howlong_microseconds% muduo::Timestamp::kMicroSecondsPerSecond*1000;
+	if (howlong_microseconds > 0)
+	{
+		howlong.it_value.tv_sec = howlong_microseconds / muduo::Timestamp::kMicroSecondsPerSecond;
+		howlong.it_value.tv_nsec = howlong_microseconds % muduo::Timestamp::kMicroSecondsPerSecond * 1000;
+	}
+	else
+	{
+		howlong.it_value.tv_sec = 0;
+		howlong.it_value.tv_nsec = 1000;
+	}
 	return howlong;
 }
-////
-void resetTimerfd(int timerfd, muduo::Timestamp expiration)
-{
-	// wake up loop by timerfd_settime()
-	struct itimerspec newValue;
-	struct itimerspec oldValue;
-	bzero(&newValue, sizeof newValue);
-	bzero(&oldValue, sizeof oldValue);
-	newValue.it_value = howMuchTimeFromNow(expiration);
-	int ret = ::timerfd_settime(timerfd, 0, &newValue, &oldValue);
-	if (ret)
-	{
-		LOG_SYSERR << "timerfd_settime()";
-	}
-}
+
 void reset_timer_fd(int timerfd, muduo::Timestamp expiration)
 {
 	itimerspec howlong = how_much_time_from_now(expiration);
@@ -76,7 +46,6 @@ void reset_timer_fd(int timerfd, muduo::Timestamp expiration)
 }
 
 
-//
 void readTimerfd(int timerfd, muduo::Timestamp now)
 {
 	uint64_t howmany;
@@ -103,6 +72,19 @@ timer_list_(less_compare())
 void timer_queue::add_timer(const timer& timer_)
 {
 	timer_list_.insert(timer_);
+	set_timer_channel();
+}
+
+void timer_queue::add_timer_in_loop(const timer& timer_)
+{
+	if (owner_loop_->if_in_loop_thread())
+	{
+		add_timer(timer_);
+	}
+	else
+	{
+		owner_loop_->run_in_loop(std::bind(&timer_queue::add_timer, this, timer_));
+	}
 }
 
 std::vector<timer> timer_queue::pop_front_queue()
@@ -117,12 +99,12 @@ std::vector<timer> timer_queue::pop_front_queue()
 void timer_queue::handle_alarm()
 {
 	readTimerfd(time_fd_, muduo::Timestamp::now());
-	timer_channel.unenable_reading();
 	std::vector<timer> active_timers = pop_front_queue();
 	for(auto& item:active_timers)
 	{
 		item.run();
-		if (item.restart()) timer_list_.insert(item);
+		if (item.restart()) 
+			timer_list_.insert(item);
 	}
 	set_timer_channel();
 }

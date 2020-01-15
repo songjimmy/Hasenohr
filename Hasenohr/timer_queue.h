@@ -14,6 +14,7 @@ public:
 	timer_queue(event_loop* loop);
 	//添加计时器
 	void add_timer(const timer& timer_);
+	void add_timer_in_loop(const timer& timer_);
 	//返回到期的计时器，(并删除到期的非循环计时器)
 	std::vector<timer> pop_front_queue();
 	//执行到期的计时器的回调,并将循环计时器重新加入列表中
