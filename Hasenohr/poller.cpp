@@ -52,7 +52,7 @@ void poller::update_channel(channel* channel_)
 		pollfd_list_[index_].events = short(channel_->events());
 		pollfd_list_[index_].revents = 0;
 		if (channel_->is_none_event())
-			pollfd_list_[index_].fd = -1;
+			pollfd_list_[index_].fd = -pollfd_list_[index_].fd -1;
 		else pollfd_list_[index_].fd = channel_->fd();
 	}
 	else
@@ -83,6 +83,31 @@ void poller::fill_active_channels(channel_list* active_channels, int num_active)
 			active_channels->push_back(active_channel);
 		}
 	}
+}
+
+void poller::remove_channel(channel* channel)
+{
+	owner_loop_->assert_in_loop_thread();
+	assert(channel != nullptr);
+	assert(channel_map_.find(channel->fd()) != channel_map_.end());
+	int id_ = channel->index();
+	if (id_ == (pollfd_list_.size()-1))
+	{
+		pollfd_list_.erase(pollfd_list_.end()-1);
+	}
+	else
+	{
+		int final_fd_ = (pollfd_list_.end() - 1)->fd;
+		if (final_fd_ < 0)
+		{
+			final_fd_ = -final_fd_ - 1;
+		}
+		std::iter_swap(pollfd_list_.end()-1,pollfd_list_.begin()+id_);
+		//assert(channel_map_.find(final_fd_) != channel_map_.end());
+		channel_map_[final_fd_]->set_index(id_);
+		pollfd_list_.erase(pollfd_list_.end() - 1);
+	}
+	channel_map_.erase(channel->fd());
 }
 
 

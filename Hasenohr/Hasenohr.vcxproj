@@ -75,16 +75,21 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClInclude Include="acceptor.h" />
     <ClInclude Include="channel.h" />
     <ClInclude Include="eventfd_channel.h" />
     <ClInclude Include="event_loop.h" />
     <ClInclude Include="event_loop_thread.h" />
     <ClInclude Include="poller.h" />
     <ClInclude Include="my_timer.h" />
+    <ClInclude Include="TCP.h" />
+    <ClInclude Include="tcp_connection.h" />
+    <ClInclude Include="tcp_server.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="timer_queue.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="acceptor.cpp" />
     <ClCompile Include="channel.cpp" />
     <ClCompile Include="eventfd_channel.cpp" />
     <ClCompile Include="event_loop.cpp" />
@@ -92,9 +97,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="poller.cpp" />
     <ClCompile Include="my_timer.cpp" />
+    <ClCompile Include="TCP.cpp" />
+    <ClCompile Include="tcp_connection.cpp" />
+    <ClCompile Include="tcp_server.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="timer_entry.cpp" />
     <ClCompile Include="timer_queue.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Text.txt" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>

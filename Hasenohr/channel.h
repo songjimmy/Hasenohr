@@ -12,10 +12,12 @@ public:
 	channel(event_loop*,fd_t);
 	channel(const channel&) = delete;
 	//channel(channel&&);
+	~channel();
 	void handle_event();
 	void set_read_callback(const Functor&);
 	void set_write_callback(const Functor&);
 	void set_erro_callback(const Functor&);
+	void set_close_callback(const Functor&);
 	int fd() const;
 	int events() const;
 	int revents() const;
@@ -48,5 +50,8 @@ private:
 	Functor func_read;
 	Functor func_write;
 	Functor func_erro;
+	Functor func_close;
 	event_loop* loop_;
+	//channel的hanle_event是否正在被调用
+	bool event_handling;
 };

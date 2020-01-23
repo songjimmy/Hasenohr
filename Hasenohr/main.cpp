@@ -4,13 +4,18 @@
 #include "my_timer.h"
 #include "timer_queue.h"
 #include "event_loop_thread.h"
+#include "acceptor.h"
+#include "tcp_server.h"
 
 #include <muduo/base/Thread.h>
 
 #include <sys/timerfd.h>
 #include <stdio.h>
 
+
 #include <functional>
+using std::placeholders::_1;
+using std::placeholders::_2;
 void timeout_1()
 {
 	printf("time out 1\n");
@@ -37,9 +42,18 @@ void timeout_6()
 {
 	printf("time out 6\n");
 }
-void timeout_7()
+void timeout_7(tcp_connection_ptr)
 {
 	printf("time out 7\n");
+}
+void timeout_8(const socket_obj&,const event_loop&)
+{
+	printf("time out 7\n");
+}
+void timeout_9(tcp_connection_ptr,std::string buf)
+{
+	printf(buf.c_str());
+	printf("recive\n");
 }
 int main_1()
 {
@@ -85,7 +99,7 @@ void thread_function_1(event_loop* loop)
 		++i;
 		if (i == 5)
 		{
-			loop->run_after(&timeout_7,1);
+			loop->run_after(&timeout_6,1);
 		}
 		if (i == 10)
 		{
@@ -126,7 +140,7 @@ int main_3()
 	return 1;
 }
 
-int main()
+int main_4()
 {
 	event_loop_thread loop_thread;
 	event_loop* loop_ = loop_thread.loop();
@@ -135,7 +149,29 @@ int main()
 	loop_->run_every(&timeout_3, 3);
 	muduo::Thread thread_(std::bind(&thread_function_1,loop_), "timer");
 	thread_.start();
-	//loop_->loop();
 	thread_.join();
+	return 1;
+}
+void daytime(int fd, event_loop& loop)
+{
+	std::string now_str = muduo::Timestamp::now().toFormattedString();
+	::write(fd, now_str.c_str(), now_str.size());
+	close(fd);
+}
+void welcome(int fd, event_loop& loop)
+{
+	std::string str("hello tcp_client");
+	::write(fd, str.c_str(), str.size());
+	::close(fd);
+}
+int main()
+{
+	event_loop loop_;
+	socket_obj socket_1(8888);
+	tcp_server server(&loop_,socket_1,"server");
+	server.set_connection_callback(timeout_7);
+	server.set_message_callback(timeout_9);
+	server.start();
+	loop_.loop();
 	return 1;
 }

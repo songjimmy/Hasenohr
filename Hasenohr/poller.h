@@ -25,10 +25,10 @@ public:
 	void assert_in_loop_thread();
 	//更新？？？
 	void update_channel(channel* channel_);
+	void remove_channel(channel* channel);
 private:
 	//根据活动的channels数量查询活动channel,并通知channel
 	void fill_active_channels(channel_list* active_channels,int num_active);
-
 	typedef std::vector<pollfd> pollfd_list;
 	typedef std::map<fd_t, channel*> channel_map;
 	//pollfd的数组，用来维护poll函数所需要的pollfd数组

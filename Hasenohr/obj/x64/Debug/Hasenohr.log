@@ -4,6 +4,51 @@
   正在验证体系结构
   正在启动远程生成
   正在编译源:
+  acceptor.cpp
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.h(23,7): warning : ‘acceptor::listened’ will be initialized after [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.h(23,7): warning :   bool listened;
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.h(23,7): warning :        ^
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.h(21,19): warning : ‘acceptor::callback_functor acceptor::cb_’ [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.h(21,19): warning :   callback_functor cb_;
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.h(21,19): warning :                    ^
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.cpp(3,1): warning : when initialized here [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.cpp(28,11): warning : unused variable ‘buf’ [-Wunused-variable]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.cpp(28,11): warning :   uint64_t buf=1;
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\acceptor.cpp(28,11): warning :            ^
+  channel.cpp
+  eventfd_channel.cpp
+  event_loop.cpp
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\event_loop.h(63,31): warning : ‘event_loop::timer_queue_’ will be initialized after [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\event_loop.h(61,35): warning : ‘std::unique_ptr<eventfd_channel> event_loop::eventfd_channel_’ [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\event_loop.cpp(13,1): warning : when initialized here [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\event_loop.cpp(15,29): warning : conversion to ‘pid_t {aka int}’ from ‘pthread_t {aka long unsigned int}’ may alter its value [-Wconversion]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\event_loop.cpp(15,29): warning :  loop_thread_id(pthread_self()),
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\event_loop.cpp(15,29): warning :                              ^
+  event_loop_thread.cpp
   main.cpp
+  poller.cpp
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(94,35): warning : comparison between signed and unsigned integer expressions [-Wsign-compare]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(94,35): warning :   if (id_ == (pollfd_list_.size()-1))
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\poller.cpp(94,35): warning :                                    ^
+  my_timer.cpp
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(33,14): warning : ‘my_timer::owner_loop_’ will be initialized after [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(33,14): warning :   event_loop* owner_loop_;
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(33,14): warning :               ^
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(27,10): warning : ‘my_timer::time_fd my_timer::time_fd_’ [-Wreorder]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(27,10): warning :   time_fd time_fd_;
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.h(27,10): warning :           ^
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\my_timer.cpp(11,1): warning : when initialized here [-Wreorder]
+  TCP.cpp
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\TCP.cpp(10,37): warning : conversion to ‘uint16_t {aka short unsigned int}’ from ‘int’ may alter its value [-Wconversion]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\TCP.cpp(10,37): warning :   inet_address_.sin_port = htons(port);
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\TCP.cpp(10,37): warning :                                      ^
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\TCP.cpp(22,37): warning : conversion to ‘uint16_t {aka short unsigned int}’ from ‘int’ may alter its value [-Wconversion]
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\TCP.cpp(22,37): warning :   inet_address_.sin_port = htons(port);
+C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\TCP.cpp(22,37): warning :                                      ^
+  tcp_connection.cpp
+  tcp_server.cpp
+  timer.cpp
+  timer_entry.cpp
+  timer_queue.cpp
   正在链接对象
   Hasenohr.vcxproj -> C:\Users\songj\source\repos\Hasenohr\Hasenohr\Hasenohr\bin\x64\Debug\Hasenohr.out

@@ -138,3 +138,8 @@ void event_loop::do_pending_functors()
 	}
 	calling_pending_functors = false;
 }
+
+void event_loop::remove_channel(channel* channel)
+{
+	poller_->remove_channel(channel);
+}

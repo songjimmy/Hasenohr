@@ -43,6 +43,7 @@ public:
 	void wake_up();
 	//在唤醒后进行执行
 	void do_pending_functors();
+	void remove_channel(channel* channel);
 private:
 	//线程检查不通过的处理
 	void abort_not_in_loop_thread();
