@@ -91,7 +91,7 @@ void poller::remove_channel(channel* channel)
 	assert(channel != nullptr);
 	assert(channel_map_.find(channel->fd()) != channel_map_.end());
 	int id_ = channel->index();
-	if (id_ == (pollfd_list_.size()-1))
+	if (id_ == int(pollfd_list_.size()-1))
 	{
 		pollfd_list_.erase(pollfd_list_.end()-1);
 	}

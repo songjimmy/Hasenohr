@@ -1,9 +1,10 @@
 #include "acceptor.h"
-
+using std::placeholders::_1;
 acceptor::acceptor(socket_obj* socket__, event_loop* loop__,const callback_functor& cb__)
-	:listen_channel(loop__,socket__->socket_fd()),
+	:
 	listened(false),
-	cb_(cb__)
+	cb_(cb__),
+	listen_channel(loop__,socket__->socket_fd())
 {
 	loop_ = loop__;
 	socket_ = socket__;
@@ -25,7 +26,6 @@ void acceptor::listen()
 
 void acceptor::on_listened()
 {
-	uint64_t buf=1;
 	accpect_socket_obj accpect_fd=socket_->accpect();
 	cb_(std::move(accpect_fd),*loop_);
 }

@@ -21,6 +21,7 @@ public:
 	typedef std::vector<channel*> channel_list;
 	//可以绑定任意谓语
 	typedef std::function<void(void)> Functor;
+	typedef std::function<void(muduo::Timestamp)> Functor_with_timestamp;
 	typedef std::vector<Functor> pending_functors;
 	event_loop();
 	event_loop(const event_loop&) = delete;
@@ -34,7 +35,7 @@ public:
 	void update_channel(channel*);
 	void quit();
 	void run_at(Functor call_back,muduo::Timestamp time_stamp);
-	void run_every(Functor call_back, double interval_second);
+	void run_every(Functor call_back,double interval_second);
 	void run_after(Functor call_back,double time_second);
 	//添加线程间通信传来的可调用对象，唤醒后执行
 	void run_in_loop(const Functor&);
@@ -47,13 +48,17 @@ public:
 private:
 	//线程检查不通过的处理
 	void abort_not_in_loop_thread();
+	
 	//是否正在循环
 	bool looping;
-	//loop所在线程编号
-	const pid_t loop_thread_id;
 	//循环是否退出的标志位
 	bool quit_;
-	//轮询器
+	
+	//loop所在线程编号
+	const pid_t loop_thread_id;
+	
+	
+	//轮询器 无需显式初始化
 	std::unique_ptr<poller> poller_;
 	//避免重复构造销毁
 	channel_list active_channels;

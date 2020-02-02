@@ -5,17 +5,26 @@
 
 #include <unistd.h>
 #include <sys/eventfd.h>
+#include <signal.h>
 
 #include <muduo/base/Logging.h>
 #define MAXTIME int(10000)
 thread_local event_loop* event_loop_in_thread=nullptr;
 const int Max_time = MAXTIME;
+//使用全局变量忽略sigpipe
+class ignore_sigpipe
+{
+public:
+	ignore_sigpipe()
+	{
+		::signal(SIGPIPE, SIG_IGN);
+	}
+};
+ignore_sigpipe initObj;
 event_loop::event_loop()
 :looping(false),
-loop_thread_id(pthread_self()),
 quit_(false),
-timer_queue_(nullptr),
-eventfd_channel_(nullptr)
+loop_thread_id(pid_t(pthread_self()))
 {
 	//重复构造怎么办,需不需要终止构造
 	assert(!event_loop_in_thread);
@@ -43,7 +52,7 @@ void event_loop::loop()
 		LOG_INFO<< timestamp.toFormattedString() << "\n";
 		for (auto& item : active_channels)
 		{
-			item->handle_event();
+			item->handle_event(timestamp);
 		}
 		do_pending_functors();
 	}

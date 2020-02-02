@@ -18,7 +18,8 @@ public:
 private:
 	socket_obj* socket_;
 	event_loop* loop_;
+	bool listened;
 	callback_functor cb_;
 	channel listen_channel;
-	bool listened;
+	
 };

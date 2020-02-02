@@ -17,14 +17,13 @@ channel::~channel()
 {
 	//channel析构时不应当在执行handle_event
 	assert(!event_handling);
-	LOG_INFO << "channel is ~";
 }
 //事件分发函数
-void channel::handle_event()
+void channel::handle_event(muduo::Timestamp return_time)
 {
 	event_handling=true;
 	//当对面挂起，且套接字不可读时，应当关闭
-	if ((revents_ & POLLHUP) && (revents_ & !POLLIN))
+	if ((revents_ & POLLHUP) && (!(revents_ & POLLIN)))
 	{
 		LOG_INFO << "connection will be closed";
 		if (func_close) func_close();//把删除这个channel的操作queue_in_loop..queue_in_loop的动作会在一次循环的最后执行
@@ -41,7 +40,7 @@ void channel::handle_event()
 	//读
 	if (revents_ & (k_read_event|POLLRDHUP))
 	{
-		if (func_read) func_read();
+		if (func_read) func_read(return_time);
 	}
 	//写
 	if (revents_&k_write_event)
@@ -52,7 +51,7 @@ void channel::handle_event()
 	event_handling = false;
 }
 
-void channel::set_read_callback(const Functor& cb)
+void channel::set_read_callback(const Functor_with_timestamp& cb)
 {
 	func_read = cb;
 }
@@ -113,6 +112,24 @@ void channel::unenable_reading()
 	events_ = k_none_event;//使读掩码置0
 	update();
 }
+
+bool channel::is_writing() const
+{
+	return (events_&k_write_event)== k_write_event;
+}
+
+void channel::enable_writing()
+{
+	events_ |= k_write_event;
+	update();
+}
+
+void channel::unenable_writing()
+{
+	events_ &= ~(k_write_event);
+	update();
+}
+
 
 int channel::index() const
 {

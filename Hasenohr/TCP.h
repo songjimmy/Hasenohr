@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <cstring>
 #include <assert.h>
 #include <algorithm>
@@ -35,6 +36,7 @@ public:
 	accpect_socket_obj(accpect_socket_obj&&);
 	accpect_socket_obj operator=(const accpect_socket_obj&)=delete;
 	~accpect_socket_obj();
+	void set_tcp_no_delay(bool on);
 	int socket_fd() const;
 private:
 	int socket_fd_;

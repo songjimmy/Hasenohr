@@ -76,12 +76,12 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="acceptor.h" />
+    <ClInclude Include="buffer.h" />
     <ClInclude Include="channel.h" />
     <ClInclude Include="eventfd_channel.h" />
     <ClInclude Include="event_loop.h" />
     <ClInclude Include="event_loop_thread.h" />
     <ClInclude Include="poller.h" />
-    <ClInclude Include="my_timer.h" />
     <ClInclude Include="TCP.h" />
     <ClInclude Include="tcp_connection.h" />
     <ClInclude Include="tcp_server.h" />
@@ -90,13 +90,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acceptor.cpp" />
+    <ClCompile Include="buffer.cpp" />
     <ClCompile Include="channel.cpp" />
     <ClCompile Include="eventfd_channel.cpp" />
     <ClCompile Include="event_loop.cpp" />
     <ClCompile Include="event_loop_thread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="poller.cpp" />
-    <ClCompile Include="my_timer.cpp" />
     <ClCompile Include="TCP.cpp" />
     <ClCompile Include="tcp_connection.cpp" />
     <ClCompile Include="tcp_server.cpp" />

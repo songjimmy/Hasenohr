@@ -7,7 +7,7 @@ socket_obj::socket_obj(char* addr, int port)
 	bzero(&inet_address_, sizeof inet_address_);
 	inet_address_.sin_family = AF_INET;
 	inet_address_.sin_addr.s_addr = inet_addr(addr);
-	inet_address_.sin_port = htons(port);
+	inet_address_.sin_port = htons(static_cast<in_port_t>(port));
 	int bind_flag=bind(socket_fd_, (sockaddr*)(&inet_address_), sizeof(inet_address_));
 	assert(bind_flag >= 0);
 }
@@ -19,7 +19,7 @@ socket_obj::socket_obj(int port)
 	bzero(&inet_address_, sizeof inet_address_);
 	inet_address_.sin_family = AF_INET;
 	inet_address_.sin_addr.s_addr = INADDR_ANY;
-	inet_address_.sin_port = htons(port);
+	inet_address_.sin_port = htons(static_cast<in_port_t>(port));
 	int bind_flag = bind(socket_fd_, (sockaddr*)(&inet_address_), sizeof(inet_address_));
 	assert(bind_flag >= 0);
 }
@@ -69,6 +69,12 @@ accpect_socket_obj::~accpect_socket_obj()
 {
 	if (socket_fd_ >= 0)
 	::close(socket_fd_);
+}
+
+void accpect_socket_obj::set_tcp_no_delay(bool on)
+{
+	int optva = on ? 1 : 0;
+	::setsockopt(socket_fd_,IPPROTO_TCP,TCP_NODELAY,&optva,sizeof optva);
 }
 
 int accpect_socket_obj::socket_fd() const
