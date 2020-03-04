@@ -30,4 +30,8 @@ void event_loop_thread::thread_functor()
 		cond.notify();
 	}
 	event_loop_.loop();
+	assert(false);
+	printf("shouldn't reach");
+	printf("shouldn't reach");
 }
+//这里条件变量的用意 在LOOP构造完成后 才通知loop开始正常工作

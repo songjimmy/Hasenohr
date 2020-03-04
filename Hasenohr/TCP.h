@@ -2,13 +2,21 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <cstring>
 #include <assert.h>
 #include <algorithm>
 
+#include <muduo/base/Logging.h>
+
 #define DEFAULT_QUEUE_NUM (int(1024)) 
+int create_nonblocking_socket();
+int check_socket_opt(int socket_fd);
+bool is_self_connection(int socket_fd);
+sockaddr_in get_local_addr(int socket);
+sockaddr_in get_peer_addr(int socket);
 class accpect_socket_obj;
 class socket_obj
 {
@@ -40,4 +48,18 @@ public:
 	int socket_fd() const;
 private:
 	int socket_fd_;
+};
+class connect_socket_obj
+{
+public:
+	connect_socket_obj(char* addr, int port);
+	connect_socket_obj(const connect_socket_obj&) = delete;
+	//connect_socket_obj(connect_socket_obj&&);
+	~connect_socket_obj();
+	int socket_fd() const;
+	int connect();
+	void operator=(const connect_socket_obj&) = delete;
+private:
+	int socket_fd_;
+	sockaddr_in inet_address_;
 };

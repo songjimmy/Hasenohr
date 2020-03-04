@@ -34,6 +34,7 @@ public:
 	bool connecting();
 	void send(const std::string& content);
 	void shutdown();
+	event_loop* show_loop() const;
 	const std::string name_;
 private:
 	//这个状态可以防止connection_established()调用第二次

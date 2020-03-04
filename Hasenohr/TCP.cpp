@@ -81,3 +81,76 @@ int accpect_socket_obj::socket_fd() const
 {
 	return socket_fd_;
 }
+
+connect_socket_obj::connect_socket_obj(char* addr, int port)
+	:socket_fd_(socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC | SOCK_NONBLOCK, IPPROTO_TCP))
+{
+	bzero(&inet_address_, sizeof inet_address_);
+	inet_address_.sin_family = AF_INET;
+	inet_address_.sin_addr.s_addr = inet_addr(addr);
+	inet_address_.sin_port = htons(static_cast<in_port_t>(port));
+}
+
+connect_socket_obj::~connect_socket_obj()
+{
+	close(socket_fd_);
+}
+
+int connect_socket_obj::socket_fd() const
+{
+	return socket_fd_;
+}
+
+int connect_socket_obj::connect()
+{
+	return ::connect(socket_fd_, (sockaddr*)(&inet_address_), sizeof(inet_address_));
+}
+
+int create_nonblocking_socket()
+{
+	return socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC | SOCK_NONBLOCK, IPPROTO_TCP);
+}
+//用来在socket可写时检查连接错误
+//如果socket_fd正确，返回opt_val(0) 否则返回 错误代码 或者 opt_val
+int check_socket_opt(int socket_fd)
+{
+	int opt_val;
+	socklen_t len=sizeof opt_val;
+	//socket_fd有错误so_error是错误代码 否则为0
+	if (::getsockopt(socket_fd, SOL_SOCKET, SO_ERROR, &opt_val, &len) < 0)
+	{
+		return errno;
+	}
+	else return opt_val;
+}
+//用来检查自连接
+bool is_self_connection(int socket_fd)
+{
+	sockaddr_in localaddr = get_local_addr(socket_fd);
+	sockaddr_in peeraddr = get_peer_addr(socket_fd);
+	return (localaddr.sin_addr.s_addr == peeraddr.sin_addr.s_addr&&localaddr.sin_port==peeraddr.sin_port);
+}
+
+sockaddr_in get_local_addr(int socket)
+{
+	sockaddr_in local_addr;
+	::bzero(&local_addr, sizeof local_addr);
+	socklen_t addr_len = sizeof local_addr;
+	if (getsockname(socket, (sockaddr*)(&local_addr), &addr_len)<0)
+	{
+		LOG_SYSERR << "TCP/get_local_addr";
+	}
+	return local_addr;
+}
+
+sockaddr_in get_peer_addr(int socket)
+{
+	sockaddr_in peer_addr;
+	::bzero(&peer_addr, sizeof peer_addr);
+	socklen_t addr_len = sizeof peer_addr;
+	if (getpeername(socket, (sockaddr*)(&peer_addr), &addr_len) < 0)
+	{
+		LOG_SYSERR << "TCP/get_peer_addr";
+	}
+	return peer_addr;
+}

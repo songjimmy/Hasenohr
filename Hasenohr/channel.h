@@ -28,7 +28,7 @@ public:
 	void set_revents(int);
 	bool is_none_event() const;
 	void enable_reading();
-	void unenable_reading();
+	void unenable_all();
 	bool is_writing() const;
 	void enable_writing();
 	void unenable_writing();

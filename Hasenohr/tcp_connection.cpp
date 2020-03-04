@@ -1,4 +1,5 @@
 #include "tcp_connection.h"
+#include <signal.h>
 using std::placeholders::_1;
 using std::placeholders::_2;
 tcp_connection::tcp_connection(event_loop* loop__, accpect_socket_obj&& socket_temp, std::string name)
@@ -92,7 +93,7 @@ void tcp_connection::on_close()
 {
 	loop_->assert_in_loop_thread();
 	assert((state == kConnected)|| (state == kDisConnecting));//
-	conn_channel->unenable_reading();//关闭连接的前置工作，该操作之后
+	conn_channel->unenable_all();//关闭连接的前置工作，该操作之后
 	this->message_callback_ = NULL;
 	disconnect_callback_(shared_from_this());
 }
@@ -103,7 +104,7 @@ void tcp_connection::destory_connection()
 	loop_->assert_in_loop_thread();
 	assert((state == kConnected) || (state == kDisConnecting));
 	state = kDisConnected;
-	conn_channel->unenable_reading();//关闭连接的前置工作，该操作之后
+	conn_channel->unenable_all();//关闭连接的前置工作，该操作之后
 	connection_callback_(shared_from_this());
 	loop_->remove_channel(conn_channel.get());
 }
@@ -127,6 +128,11 @@ void tcp_connection::shutdown()
 	}
 }
 
+event_loop* tcp_connection::show_loop() const
+{
+	return loop_;
+}
+
 void tcp_connection::set_state(states s)
 {
 	state = s;
@@ -134,6 +140,11 @@ void tcp_connection::set_state(states s)
 
 void tcp_connection::send_in_loop(const std::string& content)
 {
+	if (kConnected != state)
+	{
+		LOG_INFO << "connection is down, send is fail";
+		return;
+	}
 	if (conn_channel->is_writing())
 	{
 		out_buf.append(content.c_str(), content.size());

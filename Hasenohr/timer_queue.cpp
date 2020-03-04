@@ -69,29 +69,29 @@ timer_list_(less_compare())
 	timer_channel.print();
 }
 
-void timer_queue::add_timer(const timer& timer_)
+void timer_queue::add_timer_in_loop(const timer_ptr& timer_)
 {
 	timer_list_.insert(timer_);
 	set_timer_channel();
 }
 
-void timer_queue::add_timer_in_loop(const timer& timer_)
+void timer_queue::add_timer(const timer_ptr& timer_)
 {
 	if (owner_loop_->if_in_loop_thread())
 	{
-		add_timer(timer_);
+		add_timer_in_loop(timer_);
 	}
 	else
 	{
-		owner_loop_->run_in_loop(std::bind(&timer_queue::add_timer, this, timer_));
+		owner_loop_->run_in_loop(std::bind(&timer_queue::add_timer_in_loop, this, timer_));
 	}
 }
 
-std::vector<timer> timer_queue::pop_front_queue()
+std::vector<timer_queue::timer_ptr> timer_queue::pop_front_queue()
 {
 	muduo::Timestamp time_now = muduo::Timestamp::now();
-	timer_set::iterator it=timer_list_.upper_bound(timer(time_now,0,NULL));
-	std::vector<timer> ret_timers(timer_list_.begin(),it);
+	timer_set::iterator it = timer_list_.upper_bound(std::make_shared<timer>(time_now, 0, []()->void{}));
+	std::vector<timer_ptr> ret_timers(timer_list_.begin(),it);
 	timer_list_.erase(timer_list_.begin(), it);
 	return ret_timers;
 }
@@ -99,11 +99,11 @@ std::vector<timer> timer_queue::pop_front_queue()
 void timer_queue::handle_alarm()
 {
 	readTimerfd(time_fd_, muduo::Timestamp::now());
-	std::vector<timer> active_timers = pop_front_queue();
+	std::vector<timer_ptr> active_timers = pop_front_queue();
 	for(auto& item:active_timers)
 	{
-		item.run();
-		if (item.restart()) 
+		item->run();
+		if (item->restart()) 
 			timer_list_.insert(item);
 	}
 	set_timer_channel();
@@ -121,7 +121,7 @@ void timer_queue::set_timer_channel()
 	}
 	else
 	{
-		auto time_ = timer_list_.begin()->waiting_time();
+		auto time_ = (*timer_list_.begin())->waiting_time();
 		LOG_INFO << muduo::timeDifference(time_, muduo::Timestamp::now());
 		reset_timer_fd(time_fd_,time_);
 		timer_channel.enable_reading();

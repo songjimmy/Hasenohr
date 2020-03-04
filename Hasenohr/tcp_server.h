@@ -2,14 +2,15 @@
 #include "TCP.h"
 #include <vector>
 #include <map>
-
 #include "event_loop_thread.h"
 #include "tcp_connection.h"
+#include "event_loop_thread_pool.h"
+#define THREAD_SIZE 4; 
 class tcp_server
 {
 public:
 	typedef std::map<std::string,tcp_connection_ptr> tcp_connection_list;
-	tcp_server(event_loop* loop__, socket_obj& lisenten_addr_,std::string name);
+	tcp_server(event_loop* loop__, socket_obj& lisenten_addr_,std::string name, size_t threads_size_= 4);
 	void set_connection_callback(connection_callback connection_callback__);
 	void set_message_callback(message_callback message_callback__);
 	void set_write_complete_callback(connection_callback write_complete_callback__);
@@ -22,9 +23,7 @@ private:
 	int conn_id;
 	std::string name_;
 	event_loop* loop_;
-	//在事件循环线程池实现之前，服务器的主线程负责连接的建立，一个子线程负责io事件的实现
-	event_loop_thread io_loop_thread_;
-	event_loop* io_loop_;
+	event_loop_thread_pool threads_pool;
 	acceptor acceptor_;
 	ssize_t high_watermark_;
 	tcp_connection_list tcp_connection_list_;

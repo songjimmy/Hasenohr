@@ -107,7 +107,7 @@ void channel::enable_reading()
 	update();
 }
 
-void channel::unenable_reading()
+void channel::unenable_all()
 {
 	events_ = k_none_event;//Ê¹¶ÁÑÚÂëÖÃ0
 	update();

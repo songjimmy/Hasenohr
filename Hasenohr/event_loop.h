@@ -34,9 +34,10 @@ public:
 	static event_loop* loop_in_thread();
 	void update_channel(channel*);
 	void quit();
-	void run_at(Functor call_back,muduo::Timestamp time_stamp);
-	void run_every(Functor call_back,double interval_second);
-	void run_after(Functor call_back,double time_second);
+	//计时器接口
+	timer_queue::timer_weak run_at(Functor call_back,muduo::Timestamp time_stamp);
+	timer_queue::timer_weak run_every(Functor call_back,double interval_second);
+	timer_queue::timer_weak run_after(Functor call_back,double time_second);
 	//添加线程间通信传来的可调用对象，唤醒后执行
 	void run_in_loop(const Functor&);
 	void queue_in_loop(const Functor&);
