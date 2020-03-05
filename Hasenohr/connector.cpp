@@ -148,23 +148,19 @@ void connector::handle_write()
 	}
 	else
 	{
-		assert(state_ == k_disconnected);
+		assert(state_ == k_connected);
 	}
 }
 void connector::handle_error()
 {
-	if (k_connecting == state_)
-	{
-		int socket_fd = remove_and_reset_channel();
-		LOG_INFO << "connector::handle_error : can't connect to  " << service_addr.show_addr();
-		retry(socket_fd);
-	}
+	int socket_fd = remove_and_reset_channel();
+	LOG_INFO << "connector::handle_error : can't connect to  "<< service_addr.show_addr();
+	retry(socket_fd);
 }
 //负责socketfd文件标识符的关闭
 void connector::retry(int socketfd)
 {
 	::close(socketfd);
-	state_ = k_disconnected;
 	if (connect_)
 	{
 		LOG_INFO << "connector::retry-Retry connecting to: "
